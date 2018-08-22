@@ -996,7 +996,7 @@ void CWallet::ResendWalletTransactions(bool fForce)
             CWalletTx& wtx = item.second;
             // Don't rebroadcast until it's had plenty of time that
             // it should have gotten in already by now.
-            if (fForce || nTimeBestReceived - (int64_t)wtx.nTimeReceived > 5 * 60)
+            if (fForce || nTimeBestReceived - (int64_t)wtx.nTimeReceived > 2.5 * 60)
                 mapSorted.insert(make_pair(wtx.nTimeReceived, &wtx));
         }
         BOOST_FOREACH(PAIRTYPE(const unsigned int, CWalletTx*)& item, mapSorted)

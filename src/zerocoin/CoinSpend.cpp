@@ -65,12 +65,13 @@ CoinSpend::getDenomination() {
 }
 
 bool
-CoinSpend::Verify(const Accumulator& a, const SpendMetaData &m) const {
+CoinSpend::Verify(const Accumulator& a, const SpendMetaData &m, unsigned char nVersion) const {
 	// Verify both of the sub-proofs using the given meta-data
 	return  (a.getDenomination() == this->denomination)
 	        && commitmentPoK.Verify(serialCommitmentToCoinValue, accCommitmentToCoinValue)
 	        && accumulatorPoK.Verify(a, accCommitmentToCoinValue)
-	        && serialNumberSoK.Verify(coinSerialNumber, serialCommitmentToCoinValue, signatureHash(m));
+	        && serialNumberSoK.Verify(coinSerialNumber, serialCommitmentToCoinValue, signatureHash(m))
+	        && nVersion == CLIENT_VERSION;
 }
 
 const uint256 CoinSpend::signatureHash(const SpendMetaData &m) const {

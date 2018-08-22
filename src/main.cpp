@@ -1003,7 +1003,7 @@ int64_t GetProofOfStakeReward(int64_t nCoinAge, int64_t nFees)
     return nSubsidy + nFees;
 }
 
-static const int64_t nTargetTimespan = 15 * 60;  // 15 mins
+static const int64_t nTargetTimespan = 2.5 * 60;  // 15 mins
 //
 // maximum nBits value could possible be required nTime after
 //

@@ -76,7 +76,7 @@ public:
 	 */
 	const CoinDenomination getDenomination();
 
-	bool Verify(const Accumulator& a, const SpendMetaData &metaData) const;
+	bool Verify(const Accumulator& a, const SpendMetaData &metaData, unsigned char nVersion) const;
 
 	IMPLEMENT_SERIALIZE
 	(
