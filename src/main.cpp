@@ -40,8 +40,8 @@ CBigNum bnProofOfWorkLimit(~uint256(0) >> 20); // "standard" scrypt target limit
 CBigNum bnProofOfStakeLimit(~uint256(0) >> 20);
 CBigNum bnProofOfWorkLimitTestNet(~uint256(0) >> 16);
 
-unsigned int nTargetSpacing = 300;
-unsigned int nStakeMinAge = 24 * 60 * 60 ; // 24 hours
+unsigned int nTargetSpacing = 150;
+unsigned int nStakeMinAge = 1 * 60 * 60 ; // 24 hours
 unsigned int nStakeMaxAge = -1;           //unlimited
 unsigned int nModifierInterval = 10 * 60 ; // time to elapse before new modifier is computed
 
@@ -972,11 +972,27 @@ int64_t GetProofOfWorkReward(int64_t nFees)
 
     int64_t nSubsidy = 0 * COIN;
 
-    if (pindexBest->nHeight == 1) { nSubsidy = 1000000019 * COIN; }
-    if (pindexBest->nHeight > 1) { nSubsidy = 0.00390625 * COIN; }
-    if (pindexBest->nHeight >= 11522) { nSubsidy = 65972222 * COIN; }
-    if (pindexBest->nHeight >= 11811) { nSubsidy = 1 * COIN; }
+    // if (pindexBest->nHeight == 1) { nSubsidy = 1000000019 * COIN; }
+    // if (pindexBest->nHeight > 1) { nSubsidy = 0.00390625 * COIN; }
+    // if (pindexBest->nHeight >= 11522) { nSubsidy = 65972222 * COIN; }
+    // if (pindexBest->nHeight >= 11811) { nSubsidy = 1 * COIN; }
 
+    if(pindexBest->nHeight < 50) { 
+        nSubsidy = 198327361 * COIN;  
+    } else if(pindexBest->nHeight >= 51) { // POW Tier 0 
+        nSubsidy = 180 * COIN; 
+    } else if(pindexBest->nHeight >= 2102450) { // Tier 1 POW begins 3 months
+        nSubsidy = 150 * COIN; 
+    } else if(pindexBest->nHeight >= 3153650) { // Tier 2 POW begins 3 months
+        nSubsidy = 120 * COIN;
+    } else if(pindexBest->nHeight >= 4204850) { // Tier 3 POW begins 6 months
+        nSubsidy = 100 * COIN;
+    } else if(pindexBest->nHeight >= 5256050) { // Tier 4 POW begins 2 years
+        nSubsidy = 90 * COIN;
+    } else if(pindexBest->nHeight >= 6307250) { // Tier 5 POW begins 3 years
+        nSubsidy = 80 * COIN;
+    } 
+    
     if (fDebug && GetBoolArg("-printcreation"))
         printf("GetProofOfWorkReward() : create=%s nSubsidy=%" PRId64"\n", FormatMoney(nSubsidy).c_str(), nSubsidy);
 

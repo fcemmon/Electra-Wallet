@@ -65,19 +65,26 @@ CoinSpend::getDenomination() {
 }
 
 bool
-CoinSpend::Verify(const Accumulator& a, const SpendMetaData &m, unsigned char nVersion) const {
+CoinSpend::Verify(const Accumulator& a, const SpendMetaData &m) const {
 	// Verify both of the sub-proofs using the given meta-data
 	return  (a.getDenomination() == this->denomination)
 	        && commitmentPoK.Verify(serialCommitmentToCoinValue, accCommitmentToCoinValue)
 	        && accumulatorPoK.Verify(a, accCommitmentToCoinValue)
-	        && serialNumberSoK.Verify(coinSerialNumber, serialCommitmentToCoinValue, signatureHash(m))
-	        && nVersion == CLIENT_VERSION;
+	        && serialNumberSoK.Verify(coinSerialNumber, serialCommitmentToCoinValue, signatureHash(m));
 }
 
 const uint256 CoinSpend::signatureHash(const SpendMetaData &m) const {
 	CHashWriter h(0,0);
 	h << m << serialCommitmentToCoinValue << accCommitmentToCoinValue << commitmentPoK << accumulatorPoK;
+	if (!HasValidSerial()) {
+		throw std::invalid_argument("Invalid serial # range");
+    }
 	return h.GetHash();
+}
+
+bool CoinSpend::HasValidSerial() const
+{
+	return coinSerialNumber > 0 && coinSerialNumber < params->coinCommitmentGroup.groupOrder;
 }
 
 } /* namespace libzerocoin */

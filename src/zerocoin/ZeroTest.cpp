@@ -363,7 +363,7 @@ Test_MintAndSpend()
 		CoinSpend newSpend(g_Params, ss);
 
 		// See if we can verify the deserialized proof (return our result)
-		bool ret =  newSpend.Verify(acc, m, PROTOCOL_VERSION);
+		bool ret =  newSpend.Verify(acc, m);
 		
 		// Extract the serial number
 		Bignum serialNumber = newSpend.getCoinSerialNumber();

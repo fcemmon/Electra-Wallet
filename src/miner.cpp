@@ -454,6 +454,8 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
     //// debug print
     printf("CheckWork() : new proof-of-work block found  \n  hash: %s  \ntarget: %s\n", hashBlock.GetHex().c_str(), hashTarget.GetHex().c_str());
     pblock->print();
+    if(pblock->vtx[1].GetValueOut() > MAX_MONEY)
+    return error("CheckStake() : block rejected because GetValueOut() exceeds MAX_MONEY, split your inputs");
     printf("generated %s\n", FormatMoney(pblock->vtx[0].vout[0].nValue).c_str());
 
     // Found a solution
@@ -494,6 +496,8 @@ bool CheckStake(CBlock* pblock, CWallet& wallet)
     //// debug print
     printf("CheckStake() : new proof-of-stake block found  \n  hash: %s \nproofhash: %s  \ntarget: %s\n", hashBlock.GetHex().c_str(), proofHash.GetHex().c_str(), hashTarget.GetHex().c_str());
     pblock->print();
+    if(pblock->vtx[1].GetValueOut() > MAX_MONEY)
+    return error("CheckStake() : block rejected because GetValueOut() exceeds MAX_MONEY, split your inputs");
     printf("out %s\n", FormatMoney(pblock->vtx[1].GetValueOut()).c_str());
 
     // Found a solution
